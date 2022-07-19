@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
 
 /*
@@ -26,4 +27,7 @@ Route::get('/dashboard', [PostController::class, 'index']
 )->name('dashboard')->middleware('auth');
 Route::get('/posts/create', [PostController::class, 'create']);
 Route::post('/posts', [PostController::class, 'store']);
+Route::post('/posts/delete/{delete}', [PostController::class, 'destroy']);
 
+Route::post('/posts/like/{id}', [LikesController::class, 'store']);
+Route::post('/posts/unlike/{controleid}', [LikesController::class, 'destroy']);

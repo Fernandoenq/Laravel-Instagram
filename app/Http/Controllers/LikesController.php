@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Likes;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
-class PostController extends Controller
+class LikesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,16 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $likes = Likes::all();
-        $users = User::all();
-        $posts = Post::all(); //pega tudo no BD
-        $controle = 0;
-        $controle2 = 0;
-        $user = auth()->user();
-        $userid = $user->id;
-        $controle3 = 0;
-        return view('posts.index', compact('posts','likes', 'users',
-         'controle','userid', 'controle2', 'controle3'));
+        //
     }
 
     /**
@@ -37,7 +25,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        //
     }
 
     /**
@@ -46,28 +34,28 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id)
     {
-        $user = auth()->user();//pega o usuário logado
-        $path = $request->photo->store('public/images');
-        Post::create(
+        $posts = Post::find($id);
+        $user = auth()->user();
+        Likes::create(
             [
-                'image' => Storage::url($path),
-                'description' => $request->description,
+                'post_id' => $posts->id,
+                'tipo' => 'normal',
                 'user_id' => $user->id
             ]
         );
-
+        
         return redirect('/dashboard');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Likes  $likes
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Likes $likes)
     {
         //
     }
@@ -75,10 +63,10 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Likes  $likes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Likes $likes)
     {
         //
     }
@@ -87,10 +75,10 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Likes  $likes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Likes $likes)
     {
         //
     }
@@ -98,12 +86,13 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Likes  $likes
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($controleid)
     {
-        $expense = Post::find($id);
+        //dd($controleid);
+        $expense = Likes::find($controleid);
         $expense->delete();
         return redirect('/dashboard');
     }
